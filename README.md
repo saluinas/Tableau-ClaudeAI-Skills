@@ -8,9 +8,7 @@ by [Pablo Gomez](https://Data.Monster) — DataMonster · Tableau Visionary & Am
 
 Skills are Markdown instruction files that teach Claude your personal standards, preferences, and patterns — so you don't explain yourself every single session.
 
-You load a skill at the start of a conversation and Claude immediately knows how you work:
-
-> *"I'm going to give you a skill to follow for this conversation."* → paste the skill → start working.
+You load a skill by downloading the `.md` file and attaching it to a claude.ai conversation alongside your request — Claude reads it and immediately knows how you work.
 
 Skills work in **claude.ai chat** (web or mobile — free account supported) and in **Claude Code** (Anthropic's developer terminal tool, paid plan required). The Color Palette skill in particular is optimised for claude.ai chat, where the visual artifact panel renders the palette in full.
 
@@ -20,7 +18,7 @@ Skills work in **claude.ai chat** (web or mobile — free account supported) and
 
 | Skill | What it does | Best used in |
 |-------|-------------|--------------|
-| [`tableau-color-palette-skill.md`](./tableau-color-palette-skill.md) | Generates harmonious color palettes with visual swatches, hex codes, and Tableau Preferences.tps XML output. Includes PNG & SVG export. | claude.ai chat |
+| [`Tableau-color-palette-generator-skill.md`](https://github.com/pablodatamonster/Tableau-ClaudeAI-Skills/blob/main/Tableau-color-palette-generator-skill.md) | Generates harmonious color palettes with visual swatches, hex codes, and Tableau Preferences.tps XML output. Includes PNG export. | claude.ai chat |
 | [`tableau-calculated-fields-skill.md`](./tableau-calculated-fields-skill.md) | Calculated field standards: FIXED/INCLUDE/EXCLUDE decision logic, naming conventions, table calc patterns, NULL safety | Claude Code or chat |
 | [`tableau-chart-type-decisions-skill.md`](./tableau-chart-type-decisions-skill.md) | Chart type recommendations, color palette rules, what to never use, dashboard layout principles | Claude Code or chat |
 
@@ -30,11 +28,10 @@ Skills work in **claude.ai chat** (web or mobile — free account supported) and
 
 ### In claude.ai chat (recommended for most users)
 
-1. Open [claude.ai](https://claude.ai) and start a new conversation
-2. Open the skill `.md` file on GitHub → click **Raw** → select all and copy
-3. Paste the skill content into the chat with a message like:
-   > *"I'm going to give you a skill to follow for this conversation."*
-4. Claude will confirm it understands — then start working
+1. Click the skill file you want → click the **download icon** to save the `.md` file to your computer
+2. Open [claude.ai](https://claude.ai) and start a new conversation
+3. Click the **paperclip / attachment icon** in the chat input and attach the `.md` file
+4. Write your request in the same message — Claude reads the skill and gets straight to work
 
 > **Tip for the Color Palette skill:** Make sure **Artifacts** is enabled in your claude.ai settings (Settings → Feature Preview → Artifacts). Without it, the palette won't render visually.
 
@@ -56,7 +53,7 @@ Given a simple prompt describing your visualization, Claude will:
 - Generate a harmonious palette of 5 colors (or however many you need)
 - Render the palette visually as color swatches with names, hex codes, and roles
 - Let you click any swatch or hex code to copy it to clipboard
-- Export the palette as a **PNG** (for Canva, presentations) or **SVG** (for Adobe Illustrator, Figma)
+- Render a canvas image of the palette below the swatches — right-click to save as PNG
 - Output the Tableau **Preferences.tps XML** so you can add it directly to Tableau Desktop
 
 Example prompts that work beautifully:
