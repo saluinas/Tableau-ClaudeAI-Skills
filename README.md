@@ -21,6 +21,7 @@ Skills work in **claude.ai chat** (web or mobile — free account supported) and
 | [`Tableau-color-palette-generator-skill.md`](https://github.com/pablodatamonster/Tableau-ClaudeAI-Skills/blob/main/Tableau-color-palette-generator-skill.md) | Generates harmonious color palettes with visual swatches, hex codes, and Tableau Preferences.tps XML output. Includes PNG export. | claude.ai chat |
 | [`tableau-calculated-fields-skill.md`](./tableau-calculated-fields-skill.md) | Calculated field standards: FIXED/INCLUDE/EXCLUDE decision logic, naming conventions, table calc patterns, NULL safety | Claude Code or chat |
 | [`tableau-chart-type-decisions-skill.md`](./tableau-chart-type-decisions-skill.md) | Chart type recommendations, color palette rules, what to never use, dashboard layout principles | Claude Code or chat |
+| [`tableau-workbook-inspector-skill.md`](https://github.com/pablodatamonster/Tableau-ClaudeAI-Skills/blob/main/tableau-workbook-inspector-skill.md) | Reads and documents a `.twb` workbook — executive summary or full technical reference with calculated field formulas, data sources, fields, parameters, and inline 🔍 notes | claude.ai chat |
 
 ---
 
