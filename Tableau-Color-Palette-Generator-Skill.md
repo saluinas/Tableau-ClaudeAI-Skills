@@ -1,21 +1,101 @@
-# Tableau Color Palette Generator Skill
+# 🎨 Tableau Color Palette Generator Skill
+**A Claude AI skill by [DataMonster](https://Data.Monster) — Pablo Gomez**
+*Tableau Visionary · Ambassador · London, UK*
 
-## Purpose
-This skill guides Claude when generating harmonious color palettes for data visualization. Claude will ask for context, generate a palette, display it visually as an HTML artifact, and optionally output it in Tableau Preferences.tps format — ready to paste directly into Tableau.
+> Generate harmonious, purposeful color palettes for Tableau dashboards and infographics — with visual swatches, hex codes, PNG/SVG export, and ready-to-paste Tableau Preferences.tps XML.
+
+Originally demonstrated live at **Tableau Conference 2025** and **DataFam Europe 2025**.
+🎬 [Watch the TC2025 demo](https://www.salesforce.com/plus/experience/tableau_conference_2025/series/learning_at_tableau_conference_2025/episode/episode-s1e10)
+
+---
+
+## What this skill does
+
+1. **Asks the right questions** — theme, style, color restrictions, palette type (categorical, sequential, diverging)
+2. **Generates a harmonious palette** — 5 colors by default, with evocative names, hex codes, and roles
+3. **Renders it visually** — color swatches inside the artifact panel (claude.ai chat)
+4. **Exports as PNG and SVG** — for use in Canva, Adobe Illustrator, Figma, or presentations
+5. **Outputs Tableau XML** — paste directly into your `Preferences.tps` file and it appears in Tableau Desktop
+
+---
+
+## How to use it
+
+### In claude.ai chat ✅ Recommended
+
+> **Requires:** Free claude.ai account · Artifacts enabled (Settings → Feature Preview → Artifacts)
+
+1. Open [claude.ai](https://claude.ai) and start a new conversation
+2. Click **Raw** on this file → select all → copy
+3. Paste into the chat with:
+   > *"I'm going to give you a skill to follow for this conversation."* + paste
+4. Ask for your palette — see example prompts below
+
+### In Claude Code
+
+> **Requires:** Claude Pro or Max subscription
+
+1. Save this file to `.claude/skills/tableau-color-palette-skill.md` in your project
+2. Reference it at the start of a session:
+   > *"Read `tableau-color-palette-skill.md` and use it to generate a palette for..."*
+
+---
+
+## Example prompts
+
+```
+Generate a 5-colour palette for a professional, warm Superstore dashboard.
+High contrast, accessible for common colour blindness.
+```
+
+```
+Palette for a climate change infographic — urgency and awareness,
+3 harmonious colours using complementary and analogous combinations.
+```
+
+```
+Color palette for an F1 infographic about the Alpine team and Franco Colapinto.
+```
+
+```
+Dark-mode executive dashboard. Urban, sophisticated, minimal.
+5 colors. Deep backgrounds, luminous accents.
+```
+
+```
+Diverging palette for a healthcare dashboard — patient satisfaction
+above and below target. Clean, professional, color-blind safe.
+```
+
+---
+
+## Adding the palette to Tableau Desktop
+
+1. Go to **Documents → My Tableau Repository**
+2. Right-click `Preferences.tps` → **Open with Notepad** (never double-click)
+3. Paste the XML Claude generates inside the `<preferences>` block
+4. Save the file and **restart Tableau Desktop**
+5. The palette appears at the bottom of your color palette list
 
 ---
 
 ## About DataMonster
 
-These skills were created by **Pablo Gomez** also known in the DataFam as **DataMonster** ([Data.Monster](https://Data.Monster)) — a Tableau Visionary and Tableau Ambassador, and Data Storyteller based in London, UK.
-
-Pablo is also a public speaker and has been working in data visualization and infographic design for over a decade, and is passionate about applying AI responsibly to make data stories clearer and more human.
+These skills were created by **Pablo Gomez**, known in the DataFam as **DataMonster** — a Tableau Visionary and Tableau Ambassador, Data Storyteller, and public speaker based in London, UK. Passionate about applying AI responsibly to make data stories clearer and more human.
 
 🔗 [data.monster](https://Data.Monster) · [LinkedIn](https://www.linkedin.com/in/pablolgomez) · [Tableau Public](https://public.tableau.com/app/profile/pablolgomez)
 
-> These skills are shared freely with the DataFam community. If you use, adapt, or build on them — a shoutout is always appreciated but never required. That's the DataFam way. 💙
+> Shared freely with the DataFam community. Use it, adapt it, build on it — a shoutout is always appreciated but never required. That's the DataFam way. 💙
 
 ---
+---
+
+<!--
+  ============================================================
+  CLAUDE INSTRUCTIONS — Everything below is for Claude only.
+  Human readers can stop here.
+  ============================================================
+-->
 
 ## Claude's Role
 
@@ -25,7 +105,6 @@ You are a **color palette expert for data visualization**. Your goal is to gener
 - Always display the palette visually as a rendered HTML artifact — never as hex codes only
 - Always ask for context before generating a palette
 - Always ask if the user wants Tableau Preferences.tps output after showing the palette
-- Never generate a downloadable file — provide the XML code as copyable text only
 - Palettes should default to **5 colors** unless the user requests otherwise
 
 ---
@@ -56,6 +135,7 @@ For each color provide:
 - A **descriptive, evocative name** (e.g., "Pacific Blue", "Burnt Sienna", "Fog Grey")
 - The **hex code**
 - A brief note on its **role in the palette** (primary, accent, neutral, alert, etc.)
+- A sentence explaining **why this color was chosen** and what it communicates
 
 Apply DataMonster's color rules:
 - **Categorical palettes:** max 8 colors, each perceptually distinct, no rainbow/spectrum sequences
@@ -75,7 +155,7 @@ The artifact must include:
 - The **color name** and **hex code** displayed below each swatch
 - The **role** of each color (primary, accent, neutral, etc.)
 - The **palette name** as a title
-- A **Download PNG** button and a **Download SVG** button — so users can export the palette for use in tools like Adobe Illustrator, Canva, or Figma
+- A **Download PNG** button and a **Download SVG** button
 
 Use this complete HTML template, populated with the generated colors:
 
@@ -174,6 +254,8 @@ Use this complete HTML template, populated with the generated colors:
       font-weight: 600;
       letter-spacing: 0.02em;
       transition: background 0.15s ease, transform 0.1s ease;
+      text-decoration: none;
+      display: inline-block;
     }
     .dl-btn:hover { transform: translateY(-1px); }
     .btn-png { background: #333; color: #fff; }
@@ -243,12 +325,10 @@ Use this complete HTML template, populated with the generated colors:
   </div>
 
   <div class="button-row" id="btnRow">
-    <!-- Links are built at load time with data URIs — most reliable in sandboxed iframes -->
     <a id="pngLink" class="dl-btn btn-png" download="palette.png">🖼 Download PNG</a>
     <a id="svgLink" class="dl-btn btn-svg" download="palette.svg">✏️ Download SVG</a>
   </div>
 
-  <!-- Fallback canvas shown only if the links don't work — right-click to save -->
   <canvas id="fallbackCanvas" style="display:none;margin-top:16px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);max-width:100%;cursor:pointer;" title="Right-click → Save Image As to download PNG"></canvas>
   <div id="fallbackMsg" style="display:none;font-size:0.72em;color:#888;margin-top:6px;">Right-click the image above → <strong>Save Image As</strong> to save your PNG</div>
 
@@ -277,10 +357,9 @@ Use this complete HTML template, populated with the generated colors:
     function copyHex(hex) {
       navigator.clipboard.writeText(hex)
         .then(() => showToast('Copied ' + hex))
-        .catch(() => { /* fallback: select text */ showToast(hex + ' — copy manually'); });
+        .catch(() => { showToast(hex + ' — copy manually'); });
     }
 
-    // ── Build SVG string ────────────────────────────────────────────────────
     function buildSVG() {
       const W = 150, H = 100, PAD = 20, GAP = 14;
       const totalW = colors.length * (W + GAP) - GAP + PAD * 2;
@@ -295,7 +374,6 @@ Use this complete HTML template, populated with the generated colors:
       return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}" height="${totalH}" viewBox="0 0 ${totalW} ${totalH}"><rect width="${totalW}" height="${totalH}" fill="#f5f5f5"/><text x="${totalW/2}" y="24" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="bold" fill="#333">${PALETTE_NAME}</text>${rects}<text x="${totalW/2}" y="${totalH-6}" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#bbb">DataMonster x Claude AI · data.monster</text></svg>`;
     }
 
-    // ── Build PNG via canvas, return data URI ───────────────────────────────
     function buildPNG(svgStr, callback) {
       const img = new Image();
       img.onload = function() {
@@ -312,25 +390,21 @@ Use this complete HTML template, populated with the generated colors:
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
     }
 
-    // ── Wire up links at page load ──────────────────────────────────────────
     window.addEventListener('load', function() {
       const slug = PALETTE_NAME.replace(/\s+/g,'-').toLowerCase();
       const svgStr = buildSVG();
 
-      // SVG link — data URI, no blob needed
       const svgURI = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
       const svgLink = document.getElementById('svgLink');
       svgLink.href = svgURI;
       svgLink.download = slug + '-palette.svg';
 
-      // PNG link — build canvas, set data URI
       buildPNG(svgStr, function(pngURI, canvas) {
         const pngLink = document.getElementById('pngLink');
         if (pngURI) {
           pngLink.href = pngURI;
           pngLink.download = slug + '-palette.png';
 
-          // Also wire up the fallback canvas in case the <a download> is blocked
           const fc = document.getElementById('fallbackCanvas');
           fc.width  = canvas.width;
           fc.height = canvas.height;
@@ -338,17 +412,13 @@ Use this complete HTML template, populated with the generated colors:
           fc.style.height = (canvas.height / 2) + 'px';
           fc.getContext('2d').drawImage(canvas, 0, 0);
 
-          // Test if <a download> works — if click does nothing, show fallback
           pngLink.addEventListener('click', function() {
             setTimeout(function() {
-              // Can't definitively detect failure, so just surface the fallback
-              // as a helpful secondary option after a short delay
               document.getElementById('fallbackCanvas').style.display = 'block';
               document.getElementById('fallbackMsg').style.display = 'block';
             }, 1200);
           });
         } else {
-          // Canvas API failed — hide PNG button, show SVG only
           pngLink.style.display = 'none';
         }
       });
@@ -366,14 +436,6 @@ Use this complete HTML template, populated with the generated colors:
 4. Replace each `Role 1`–`Role 5` with the color's role in **both** places
 5. Output the entire populated HTML as a **rendered artifact** — never as a code block
 
-**What the user gets:**
-- Visual swatches in the artifact panel — click any swatch or hex to copy to clipboard
-- **Download PNG** and **Download SVG** links pre-wired at page load with data URIs
-- If the PNG link is blocked by the sandbox, a fallback canvas appears after the click — right-click it and choose **Save Image As**
-- For SVG: if the download is blocked, the user can copy the SVG data URI from the link's `href` and paste it into the browser address bar, then save
-
-**Note on Claude Code vs claude.ai:** This skill is optimised for **claude.ai chat** (web or mobile). Claude Code's artifact rendering is limited and does not support the full interactive HTML experience. Recommend using claude.ai for the best results.
-
 ---
 
 ### Step 4 — Ask about Tableau Preferences output
@@ -387,7 +449,7 @@ After displaying the palette, always ask:
 
 ### Step 5 — Generate Tableau XML (if requested)
 
-If the user says yes, output the palette in the following formats as **copyable code blocks** (never as a downloadable file):
+If the user says yes, output the palette in the following formats as **copyable code blocks**:
 
 **Format 1 — Regular (categorical)**
 ```xml
@@ -417,8 +479,6 @@ Remind the user:
 ---
 
 ## Color Theory Reference (for Claude)
-
-Use these principles when constructing palettes:
 
 | Goal | Approach |
 |------|----------|
@@ -455,13 +515,3 @@ Use these principles when constructing palettes:
 - Warm Stone 🪨 `#C4A882` — Neutral
 - Deep Sky 🌤️ `#457B9D` — Accent
 - Soft White ☁️ `#F4F1EE` — Background/Base
-
----
-
-## How to Ask Claude for a Palette
-
-Provide as much context as you can:
-
-> *"Using this skill, generate a color palette for a financial performance dashboard. Style: corporate and serious. Must be color-blind safe. I need a diverging palette for profit vs loss."*
-
-The more context, the more purposeful the palette. Claude will always ask for missing details before generating.
