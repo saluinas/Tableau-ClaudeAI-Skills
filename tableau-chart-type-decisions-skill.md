@@ -1,19 +1,109 @@
-# Tableau Chart Type Decisions Skill
+# 📊 Tableau Chart Type Decisions Skill
+**A Claude AI skill by [DataMonster](https://Data.Monster) — Pablo Gomez**
+*Tableau Visionary · Ambassador · London, UK*
 
-## Purpose
-This skill guides Claude when recommending, critiquing, or designing chart types for Tableau dashboards. Always read this file before suggesting a visualisation approach. Recommendations should reflect DataMonster's design philosophy: clarity over complexity, earned sophistication, and data storytelling over data displaying.
+> Choose the right chart every time. This skill applies DataMonster's visualisation philosophy to recommend, critique, and design chart types for Tableau dashboards — with decision frameworks, rules for what to avoid, color guidelines, and layout principles.
+
+---
+
+## What this skill does
+
+Load this skill and Claude applies DataMonster's design thinking to every chart recommendation:
+
+- **Decision framework** — analytical task → data shape → audience, before any chart is suggested
+- **Chart type reference** — comparison, time series, distribution, composition, relationship, geography, small multiples
+- **The never-use list** — pie charts, 3D charts, gauges, radar charts, word clouds, and why
+- **Colour usage rules** — sequential, diverging, categorical, highlight palettes and when to use each
+- **Dashboard layout principles** — hierarchy, whitespace, grid alignment, KPI placement
+
+**DataMonster's core philosophy:** clarity over complexity, one chart one insight, colour is meaning — never decoration.
+
+---
+
+## How to use it
+
+### In claude.ai chat ✅ Recommended for most users
+
+> **Requires:** Free claude.ai account at [claude.ai](https://claude.ai)
+
+1. Open a new conversation on [claude.ai](https://claude.ai)
+2. Click **Raw** on this file → select all → copy
+3. Paste into the chat with:
+   > *"I'm going to give you a skill to follow for this conversation."* + paste
+4. Describe your data and question — Claude will recommend the right chart with reasoning
+
+### In Claude Code
+
+> **Requires:** Claude Pro or Max subscription
+
+1. Save this file to `.claude/skills/tableau-chart-type-decisions-skill.md` in your project
+2. Reference it at the start of a session:
+   > *"Read `tableau-chart-type-decisions-skill.md` then recommend a chart for..."*
+
+---
+
+## Example prompts
+
+```
+Which regions are underperforming vs target this quarter?
+Data: [Region], [Sales], [Target]. One row per region. Executive audience.
+```
+
+```
+I want to show how 12 product categories have trended over the last 3 years.
+Analyst audience. What chart type should I use?
+```
+
+```
+I have customer satisfaction scores from 0–10 across 5 departments.
+I want to show distribution, not just averages. What do you recommend?
+```
+
+```
+My dashboard has 6 charts and feels cluttered. Review my layout approach:
+[describe your current layout]. What should I change?
+```
+
+```
+Should I use a pie chart to show market share across 5 competitors?
+```
+
+---
+
+## The "Never Use" List
+
+| Chart | Why DataMonster avoids it |
+|-------|--------------------------|
+| Pie chart | Humans cannot accurately compare angles |
+| Donut chart | Same problems as pie, with a hole |
+| 3D charts (any) | Distorts perception, adds zero information |
+| Gauge / speedometer | Wastes space, terrible data-ink ratio |
+| Radar / spider chart | Perceptually misleading, hard to compare |
+| Word cloud | Font size ≠ frequency is not reliable encoding |
 
 ---
 
 ## About DataMonster
 
-These skills were created by **Pablo Gomez** also known in the DataFam as **DataMonster** ([Data.Monster](https://Data.Monster)) — a Tableau Visionary and Tableau Ambassador, and Data Storyteller based in London, UK.
-
-Pablo is also a public speaker and has been working in data visualization and infographic design for over a decade, and is passionate about applying AI responsibly to make data stories clearer and more human.
+These skills were created by **Pablo Gomez**, known in the DataFam as **DataMonster** — a Tableau Visionary and Tableau Ambassador, Data Storyteller, and public speaker based in London, UK. Passionate about applying AI responsibly to make data stories clearer and more human.
 
 🔗 [data.monster](https://Data.Monster) · [LinkedIn](https://www.linkedin.com/in/pablolgomez) · [Tableau Public](https://public.tableau.com/app/profile/pablolgomez)
 
-> These skills are shared freely with the DataFam community. If you use, adapt, or build on them — a shoutout is always appreciated but never required. That's the DataFam way. 💙
+> Shared freely with the DataFam community. Use it, adapt it, build on it — a shoutout is always appreciated but never required. That's the DataFam way. 💙
+
+---
+---
+
+<!--
+  ============================================================
+  CLAUDE INSTRUCTIONS — Everything below is for Claude only.
+  Human readers can stop here.
+  ============================================================
+-->
+
+## Purpose
+
+This skill guides Claude when recommending, critiquing, or designing chart types for Tableau dashboards. Always read this file before suggesting a visualisation approach. Recommendations should reflect DataMonster's design philosophy: clarity over complexity, earned sophistication, and data storytelling over data displaying.
 
 ---
 
@@ -207,7 +297,7 @@ DataMonster's small multiple rules:
 - Never use red/green as the only differentiator (colour blindness)
 - Colour blind safe alternatives: Blue/Orange, Blue/Red with sufficient contrast
 
-### DataMonster's Accent Palette (customise these)
+### DataMonster's Accent Palette
 ```xml
 <!-- Add to Tableau Preferences.tps -->
 <color-palette name="DataMonster Custom" type="regular">
