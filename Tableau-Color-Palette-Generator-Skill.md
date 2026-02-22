@@ -14,7 +14,7 @@ Originally demonstrated live at **Tableau Conference 2025** and **DataFam Europe
 1. **Asks the right questions** — theme, style, color restrictions, palette type (categorical, sequential, diverging)
 2. **Generates a harmonious palette** — 5 colors by default, with evocative names, hex codes, and roles
 3. **Renders it visually** — color swatches inside the artifact panel (claude.ai chat)
-4. **Exports as PNG** — download the palette for use in Canva, presentations, or anywhere you need the image
+4. **Exports as PNG** — a canvas image renders directly below the swatches; right-click it and choose **Save Image As** to download
 5. **Outputs Tableau XML** — paste directly into your `Preferences.tps` file and it appears in Tableau Desktop
 
 ---
@@ -245,26 +245,6 @@ Use this complete HTML template, populated with the generated colors:
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .button-row {
-      display: flex;
-      gap: 12px;
-      margin-top: 4px;
-    }
-    .dl-btn {
-      padding: 9px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.85em;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      transition: background 0.15s ease, transform 0.1s ease;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .dl-btn:hover { transform: translateY(-1px); }
-    .btn-png { background: #333; color: #fff; }
-    .btn-png:hover { background: #111; }
     .footer {
       margin-top: 20px;
       font-size: 0.65em;
@@ -327,12 +307,12 @@ Use this complete HTML template, populated with the generated colors:
     </div>
   </div>
 
-  <div class="button-row" id="btnRow">
-    <a id="pngLink" class="dl-btn btn-png" download="palette.png">🖼 Download PNG</a>
+  <!-- PNG export section -->
+  <div style="margin-top:28px;text-align:center;">
+    <div style="font-size:1.2em;font-weight:700;color:#333;letter-spacing:0.02em;">⬇️ Download your color palette</div>
+    <div style="font-size:0.78em;color:#888;margin-top:4px;">Right-click the image below → <strong>Save Image As</strong> to download your PNG</div>
   </div>
-
-  <canvas id="fallbackCanvas" style="display:none;margin-top:16px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);max-width:100%;cursor:pointer;" title="Right-click → Save Image As to download PNG"></canvas>
-  <div id="fallbackMsg" style="display:none;font-size:0.72em;color:#888;margin-top:6px;">Right-click the image above → <strong>Save Image As</strong> to save your PNG</div>
+  <canvas id="pngCanvas" style="margin-top:12px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.12);max-width:100%;cursor:pointer;" title="Right-click → Save Image As to save your PNG"></canvas>
 
   <div class="footer">Click swatches or hex codes to copy · DataMonster × Claude AI · data.monster</div>
   <div class="toast" id="toast">Copied!</div>
@@ -362,64 +342,75 @@ Use this complete HTML template, populated with the generated colors:
         .catch(() => { showToast(hex + ' — copy manually'); });
     }
 
-    function buildSVG() {
-      const W = 150, H = 100, PAD = 20, GAP = 14;
-      const totalW = colors.length * (W + GAP) - GAP + PAD * 2;
-      const totalH = H + 100;
-      const rects = colors.map((c, i) => {
-        const x = PAD + i * (W + GAP);
-        return `<rect x="${x}" y="36" width="${W}" height="${H}" rx="8" fill="${c.hex}"/>
-<text x="${x+W/2}" y="${36+H+17}" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#333">${c.name}</text>
-<text x="${x+W/2}" y="${36+H+31}" text-anchor="middle" font-family="monospace" font-size="10" fill="#555">${c.hex}</text>
-<text x="${x+W/2}" y="${36+H+45}" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#999">${c.role.toUpperCase()}</text>`;
-      }).join('\n');
-      return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}" height="${totalH}" viewBox="0 0 ${totalW} ${totalH}"><rect width="${totalW}" height="${totalH}" fill="#f5f5f5"/><text x="${totalW/2}" y="24" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="bold" fill="#333">${PALETTE_NAME}</text>${rects}<text x="${totalW/2}" y="${totalH-6}" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#bbb">DataMonster x Claude AI · data.monster</text></svg>`;
-    }
+    // Draw palette directly onto canvas using the Canvas 2D API — no SVG/Image needed
+    function drawPalette() {
+      const SCALE = 2; // retina
+      const SW = 130, SH = 90, GAP = 14, PAD = 20;
+      const LABEL_H = 70;
+      const FOOTER_H = 30;
+      const HEADER_H = 52;
+      const totalW = colors.length * (SW + GAP) - GAP + PAD * 2;
+      const totalH = HEADER_H + SH + LABEL_H + FOOTER_H;
 
-    function buildPNG(svgStr, callback) {
-      const img = new Image();
-      img.onload = function() {
-        const scale = 2;
-        const canvas = document.createElement('canvas');
-        canvas.width  = img.naturalWidth  * scale;
-        canvas.height = img.naturalHeight * scale;
-        const ctx = canvas.getContext('2d');
-        ctx.scale(scale, scale);
-        ctx.drawImage(img, 0, 0);
-        callback(canvas.toDataURL('image/png'), canvas);
-      };
-      img.onerror = function() { callback(null, null); };
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr);
-    }
+      const canvas = document.getElementById('pngCanvas');
+      canvas.width  = totalW * SCALE;
+      canvas.height = totalH * SCALE;
+      canvas.style.width  = totalW + 'px';
+      canvas.style.height = totalH + 'px';
 
-    window.addEventListener('load', function() {
-      const slug = PALETTE_NAME.replace(/\s+/g,'-').toLowerCase();
-      const svgStr = buildSVG();
+      const ctx = canvas.getContext('2d');
+      ctx.scale(SCALE, SCALE);
 
-      buildPNG(svgStr, function(pngURI, canvas) {
-        const pngLink = document.getElementById('pngLink');
-        if (pngURI) {
-          pngLink.href = pngURI;
-          pngLink.download = slug + '-palette.png';
+      // Background
+      ctx.fillStyle = '#f5f5f5';
+      ctx.fillRect(0, 0, totalW, totalH);
 
-          const fc = document.getElementById('fallbackCanvas');
-          fc.width  = canvas.width;
-          fc.height = canvas.height;
-          fc.style.width  = (canvas.width  / 2) + 'px';
-          fc.style.height = (canvas.height / 2) + 'px';
-          fc.getContext('2d').drawImage(canvas, 0, 0);
+      // Title
+      ctx.fillStyle = '#333';
+      ctx.font = 'bold 15px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(PALETTE_NAME, totalW / 2, 24);
 
-          pngLink.addEventListener('click', function() {
-            setTimeout(function() {
-              document.getElementById('fallbackCanvas').style.display = 'block';
-              document.getElementById('fallbackMsg').style.display = 'block';
-            }, 1200);
-          });
-        } else {
-          pngLink.style.display = 'none';
-        }
+      // Subtitle
+      ctx.fillStyle = '#888';
+      ctx.font = 'italic 10px Arial, sans-serif';
+      ctx.fillText('Generated by DataMonster \u00d7 Claude AI', totalW / 2, 40);
+
+      colors.forEach(function(c, i) {
+        const x = PAD + i * (SW + GAP);
+        const y = HEADER_H;
+
+        // Rounded swatch
+        ctx.fillStyle = c.hex;
+        ctx.beginPath();
+        ctx.roundRect(x, y, SW, SH, 8);
+        ctx.fill();
+
+        // Color name
+        ctx.fillStyle = '#333';
+        ctx.font = 'bold 11px Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(c.name, x + SW / 2, y + SH + 16);
+
+        // Hex code
+        ctx.fillStyle = '#555';
+        ctx.font = '10px monospace';
+        ctx.fillText(c.hex, x + SW / 2, y + SH + 30);
+
+        // Role
+        ctx.fillStyle = '#999';
+        ctx.font = '9px Arial, sans-serif';
+        ctx.fillText(c.role.toUpperCase(), x + SW / 2, y + SH + 46);
       });
-    });
+
+      // Footer
+      ctx.fillStyle = '#bbb';
+      ctx.font = '9px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('DataMonster \u00d7 Claude AI \u00b7 data.monster', totalW / 2, totalH - 10);
+    }
+
+    window.addEventListener('load', drawPalette);
   </script>
 
 </body>
@@ -427,11 +418,15 @@ Use this complete HTML template, populated with the generated colors:
 ```
 
 **How Claude must populate this template:**
-1. Replace `[PALETTE NAME]` in **three places**: the `<h2>` tag, the `<div class="subtitle">`, and the `PALETTE_NAME` JS constant
+1. Replace `[PALETTE NAME]` in **two places**: the `<h2>` tag and the `PALETTE_NAME` JS constant
 2. Replace each `#HEX1`–`#HEX5` with actual hex codes in **both** the HTML swatch divs and the JS `colors` array
 3. Replace each `Color Name 1`–`Color Name 5` with evocative names in **both** places
 4. Replace each `Role 1`–`Role 5` with the color's role in **both** places
 5. Output the entire populated HTML as a **rendered artifact** — never as a code block
+
+**What the user gets:**
+- Visual swatches in the artifact panel — click any swatch or hex to copy to clipboard
+- A canvas image rendered directly below the swatches — right-click it and choose **Save Image As** to save as PNG. This is always visible and requires no button click or async processing.
 
 ---
 
