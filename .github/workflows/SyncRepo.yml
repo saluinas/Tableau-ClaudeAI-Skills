@@ -1,0 +1,38 @@
+name: Sync from upstream (Pablo's repo)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    # Runs every 6 hours. You can change this if you like.
+    - cron: "0 */6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream and fetch
+        run: |
+          git remote add upstream https://github.com/pablodatamonster/Tableau-ClaudeAI-Skills.git
+          git fetch upstream
+
+      - name: Fast-forward main from upstream/main
+        run: |
+          git checkout main
+          git merge --ff-only upstream/main
+
+      - name: Push updates to your fork
+        run: |
+          git push origin main
